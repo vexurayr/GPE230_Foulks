@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "AMazeCharacter.generated.h"
+#include "MazeCharacter.generated.h"
 
 UCLASS()
-class GPE230_FOULKS_API AAMazeCharacter : public ACharacter
+class GPE230_FOULKS_API AMazeCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this character's properties
-	AAMazeCharacter();
+	AMazeCharacter();
 
 protected:
 	// Called when the game starts or when spawned
@@ -26,4 +26,14 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	// Variables an functions for character movement
+private:
+	UPROPERTY(EditAnywhere)
+		float moveSpeed;
+	UPROPERTY(EditAnywhere)
+		float rotationSpeed;
+
+	void MoveFB(float value);
+	void MoveLR(float value);
+	void Rotate(float value);
 };
