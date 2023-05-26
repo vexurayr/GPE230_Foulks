@@ -9,6 +9,20 @@ AMazeCharacter::AMazeCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	// Instantiate components
+	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComponent"));
+	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
+
+	// Attach class components to the character's skeletal mesh component
+	SpringArmComponent->SetupAttachment(GetMesh());
+
+	// Attach the camera to the spring arm component
+	CameraComponent->AttachToComponent(SpringArmComponent, FAttachmentTransformRules::KeepRelativeTransform);
+
+	// Set defaults for spring arm component
+	SpringArmComponent->bUsePawnControlRotation = true;
+	SpringArmComponent->bEnableCameraLag = true;
+	SpringArmComponent->TargetArmLength = 300.0f;
 }
 
 // Called when the game starts or when spawned
@@ -35,7 +49,8 @@ void AMazeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	// The third parameter is the function the axis will call, passing in its scale
 	PlayerInputComponent->BindAxis(TEXT("MoveFB"), this, &AMazeCharacter::MoveFB);
 	PlayerInputComponent->BindAxis(TEXT("MoveLR"), this, &AMazeCharacter::MoveLR);
-	PlayerInputComponent->BindAxis(TEXT("Rotate"), this, &AMazeCharacter::Rotate);
+	PlayerInputComponent->BindAxis(TEXT("RotateLR"), this, &AMazeCharacter::RotateLR);
+	PlayerInputComponent->BindAxis(TEXT("RotateUD"), this, &AMazeCharacter::RotateUD);
 }
 
 /*
@@ -54,7 +69,21 @@ void AMazeCharacter::MoveLR(float value)
 	AddMovementInput(-GetActorRightVector(), value * moveSpeed);
 }
 
-void AMazeCharacter::Rotate(float value)
+void AMazeCharacter::RotateLR(float value)
 {
 	AddControllerYawInput(value * rotationSpeed);
+}
+
+void AMazeCharacter::RotateUD(float value)
+{
+	if (value)
+	{
+		// Cap pitch rotation, must disable "Use Pawn Control Rotation" for this method
+		float nextPitchValue = SpringArmComponent->GetRelativeRotation().Pitch + (value * rotationSpeed);
+		
+		if (nextPitchValue > -45 && nextPitchValue < 15)
+		{
+			SpringArmComponent->AddLocalRotation(FRotator(value * rotationSpeed, 0, 0));
+		}
+	}
 }

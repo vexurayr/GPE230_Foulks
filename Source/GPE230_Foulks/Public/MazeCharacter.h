@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Camera/CameraComponent.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/Character.h"
 #include "MazeCharacter.generated.h"
 
@@ -15,18 +17,23 @@ public:
 	// Sets default values for this character's properties
 	AMazeCharacter();
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	// Variables an functions for character movement
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+	// Spring arm component for reducing camera obstruction
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		class USpringArmComponent* SpringArmComponent;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		class UCameraComponent* CameraComponent;
+
+// Variables and functions for character movement
 private:
 	UPROPERTY(EditAnywhere)
 		float moveSpeed;
@@ -35,5 +42,6 @@ private:
 
 	void MoveFB(float value);
 	void MoveLR(float value);
-	void Rotate(float value);
+	void RotateLR(float value);
+	void RotateUD(float value);
 };
