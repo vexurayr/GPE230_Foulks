@@ -12,7 +12,7 @@ ALockAndKey::ALockAndKey()
 }
 
 /// <summary>
-/// On collisioin with a trigger box, check for a maze character, open the door if one is found
+/// On collision with a trigger box, check for a maze character, open the door if one is found
 /// </summary>
 /// <param name="OverlappedActor"></param>
 /// <param name="OtherActor"></param>

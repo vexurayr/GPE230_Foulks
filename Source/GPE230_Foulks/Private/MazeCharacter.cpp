@@ -59,21 +59,37 @@ void AMazeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	AddControllerYawInput() takes a speed and rotates the character
 */
 
+/// <summary>
+/// Moves maze character forwards and backwards
+/// </summary>
+/// <param name="value"></param>
 void AMazeCharacter::MoveFB(float value)
 {
 	AddMovementInput(GetActorForwardVector(), value * moveSpeed);
 }
 
+/// <summary>
+/// Moves maze character left and right
+/// </summary>
+/// <param name="value"></param>
 void AMazeCharacter::MoveLR(float value)
 {
 	AddMovementInput(-GetActorRightVector(), value * moveSpeed);
 }
 
+/// <summary>
+/// Rotates maze character left and right
+/// </summary>
+/// <param name="value"></param>
 void AMazeCharacter::RotateLR(float value)
 {
 	AddControllerYawInput(value * rotationSpeed);
 }
 
+/// <summary>
+/// Rotates maze character camera up and down
+/// </summary>
+/// <param name="value"></param>
 void AMazeCharacter::RotateUD(float value)
 {
 	if (value)
