@@ -36,12 +36,22 @@ protected:
 // Variables and functions for character movement
 private:
 	UPROPERTY(EditAnywhere)
-		float moveSpeed;
+		float walkSpeed;
+	UPROPERTY(EditAnywhere)
+		float crouchSpeed;
+	UPROPERTY(EditAnywhere)
+		float sprintSpeed;
 	UPROPERTY(EditAnywhere)
 		float rotationSpeed;
+	UPROPERTY(EditDefaultsOnly)
+		bool isCrouching;
+	UPROPERTY(EditDefaultsOnly)
+		bool isSprinting;
 
 	void MoveFB(float value);
 	void MoveLR(float value);
 	void RotateLR(float value);
 	void RotateUD(float value);
+	void Crouch(float value);
+	void Sprint(float value);
 };
