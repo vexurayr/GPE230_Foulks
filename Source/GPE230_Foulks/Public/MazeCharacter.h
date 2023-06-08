@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/Character.h"
@@ -38,20 +39,18 @@ private:
 	UPROPERTY(EditAnywhere)
 		float walkSpeed;
 	UPROPERTY(EditAnywhere)
-		float crouchSpeed;
+		float crouchSpeedMultiplier;
 	UPROPERTY(EditAnywhere)
-		float sprintSpeed;
+		float sprintSpeedMultiplier;
 	UPROPERTY(EditAnywhere)
 		float rotationSpeed;
-	UPROPERTY(EditDefaultsOnly)
-		bool isCrouching;
-	UPROPERTY(EditDefaultsOnly)
-		bool isSprinting;
 
 	void MoveFB(float value);
 	void MoveLR(float value);
 	void RotateLR(float value);
 	void RotateUD(float value);
-	void Crouch(float value);
-	void Sprint(float value);
+	void StartCrouching();
+	void StopCrouching();
+	void StartSprinting();
+	void StopSprinting();
 };

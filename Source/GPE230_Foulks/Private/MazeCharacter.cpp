@@ -51,8 +51,12 @@ void AMazeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAxis(TEXT("MoveLR"), this, &AMazeCharacter::MoveLR);
 	PlayerInputComponent->BindAxis(TEXT("RotateLR"), this, &AMazeCharacter::RotateLR);
 	PlayerInputComponent->BindAxis(TEXT("RotateUD"), this, &AMazeCharacter::RotateUD);
-	PlayerInputComponent->BindAxis(TEXT("Crouch"), this, &AMazeCharacter::Crouch);
-	PlayerInputComponent->BindAxis(TEXT("Sprint"), this, &AMazeCharacter::Sprint);
+
+	PlayerInputComponent->BindAction(TEXT("Sprint"), IE_Pressed, this, &AMazeCharacter::StartSprinting);
+	PlayerInputComponent->BindAction(TEXT("Sprint"), IE_Released, this, &AMazeCharacter::StopSprinting);
+
+	PlayerInputComponent->BindAction(TEXT("Crouch"), IE_Pressed, this, &AMazeCharacter::StartCrouching);
+	PlayerInputComponent->BindAction(TEXT("Crouch"), IE_Released, this, &AMazeCharacter::StopCrouching);
 }
 
 /*
@@ -67,18 +71,7 @@ void AMazeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 /// <param name="value"></param>
 void AMazeCharacter::MoveFB(float value)
 {
-	if (isCrouching)
-	{
-		AddMovementInput(GetActorForwardVector(), value * crouchSpeed);
-	}
-	else if (isSprinting)
-	{
-		AddMovementInput(GetActorForwardVector(), value * sprintSpeed);
-	}
-	else
-	{
-		AddMovementInput(GetActorForwardVector(), value * walkSpeed);
-	}
+	AddMovementInput(GetActorForwardVector(), value * walkSpeed);
 }
 
 /// <summary>
@@ -87,18 +80,7 @@ void AMazeCharacter::MoveFB(float value)
 /// <param name="value"></param>
 void AMazeCharacter::MoveLR(float value)
 {
-	if (isCrouching)
-	{
-		AddMovementInput(-GetActorRightVector(), value * crouchSpeed);
-	}
-	else if (isSprinting)
-	{
-		AddMovementInput(-GetActorRightVector(), value * sprintSpeed);
-	}
-	else
-	{
-		AddMovementInput(-GetActorRightVector(), value * walkSpeed);
-	}
+	AddMovementInput(-GetActorRightVector(), value * walkSpeed);
 }
 
 /// <summary>
@@ -128,26 +110,22 @@ void AMazeCharacter::RotateUD(float value)
 	}
 }
 
-void AMazeCharacter::Crouch(float value)
+void AMazeCharacter::StartCrouching()
 {
-	if (value > 0)
-	{
-		isCrouching = true;
-	}
-	else
-	{
-		isCrouching = false;
-	}
+	GetCharacterMovement()->MaxWalkSpeed *= crouchSpeedMultiplier;
 }
 
-void AMazeCharacter::Sprint(float value)
+void AMazeCharacter::StopCrouching()
 {
-	if (value > 0)
-	{
-		isSprinting = true;
-	}
-	else
-	{
-		isSprinting = false;
-	}
+	GetCharacterMovement()->MaxWalkSpeed /= crouchSpeedMultiplier;
+}
+
+void AMazeCharacter::StartSprinting()
+{
+	GetCharacterMovement()->MaxWalkSpeed *= sprintSpeedMultiplier;
+}
+
+void AMazeCharacter::StopSprinting()
+{
+	GetCharacterMovement()->MaxWalkSpeed /= sprintSpeedMultiplier;
 }
