@@ -29,7 +29,37 @@ AMazeCharacter::AMazeCharacter()
 void AMazeCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	_currentHealth = maxHealth;
+}
+
+/// <summary>
+/// Apply incoming damage to the player's health and check if it killed the player
+/// </summary>
+/// <param name="DamageAmount">- The amount of health the player has lost</param>
+/// <param name="DamageEvent"></param>
+/// <param name="EventInstigator"></param>
+/// <param name="DamageCauser"></param>
+/// <returns>Player's resulting current health</returns>
+float AMazeCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	// Subtract incoming damage from current health
+	_currentHealth -= DamageAmount;
+
+	UE_LOG(LogTemp, Log, TEXT("Player Took %f Damage. %f Health Remaining."), DamageAmount, _currentHealth);
+
+	if (_currentHealth <= 0)
+	{
+		Die();
+	}
+
+	return _currentHealth;
+}
+
+void AMazeCharacter::Die()
+{
+	_currentHealth = maxHealth;
+
+	SetActorLocation(mazeBeginning);
 }
 
 // Called every frame
