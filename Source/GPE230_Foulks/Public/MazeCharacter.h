@@ -36,18 +36,37 @@ protected:
 	/// <summary>
 	/// The current health of the player character
 	/// </summary>
-	float _currentHealth;
+	UPROPERTY(BlueprintReadOnly)
+		float _currentHealth;
+	/// <summary>
+	/// The level of noise the player makes as they move
+	/// </summary>
+	UPROPERTY(BlueprintReadOnly)
+		float _noiseIntensity;
+	/// <summary>
+	/// The amount of time it takes to regain the stun ability
+	/// </summary>
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		float _stunAbilityCooldown;
+	/// <summary>
+	/// The timer that tracks the time remaining before the stun ability comes back
+	/// </summary>
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		float _stunAbilityTimer;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
 	UFUNCTION(BlueprintCallable)
 		virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
 			AActor* DamageCauser) override;
+
 	virtual void Die();
 
 	// Spring arm component for reducing camera obstruction
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		class USpringArmComponent* SpringArmComponent;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		class UCameraComponent* CameraComponent;
 
@@ -70,4 +89,5 @@ private:
 	void StopCrouching();
 	void StartSprinting();
 	void StopSprinting();
+	void UseStunAbility();
 };

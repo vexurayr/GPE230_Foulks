@@ -101,7 +101,9 @@ void AMazeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 /// <param name="value"></param>
 void AMazeCharacter::MoveFB(float value)
 {
+	_noiseIntensity = 1;
 	AddMovementInput(GetActorForwardVector(), value * walkSpeed);
+	_noiseIntensity = 0;
 }
 
 /// <summary>
@@ -110,7 +112,9 @@ void AMazeCharacter::MoveFB(float value)
 /// <param name="value"></param>
 void AMazeCharacter::MoveLR(float value)
 {
+	_noiseIntensity = 1;
 	AddMovementInput(-GetActorRightVector(), value * walkSpeed);
+	_noiseIntensity = 0;
 }
 
 /// <summary>
@@ -158,4 +162,9 @@ void AMazeCharacter::StartSprinting()
 void AMazeCharacter::StopSprinting()
 {
 	GetCharacterMovement()->MaxWalkSpeed /= sprintSpeedMultiplier;
+}
+
+void AMazeCharacter::UseStunAbility()
+{
+
 }
