@@ -42,24 +42,34 @@ void AMazeCharacter::BeginPlay()
 /// <returns>Player's resulting current health</returns>
 float AMazeCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-	// Subtract incoming damage from current health
-	_currentHealth -= DamageAmount;
-
-	UE_LOG(LogTemp, Log, TEXT("Player Took %f Damage. %f Health Remaining."), DamageAmount, _currentHealth);
-
-	if (_currentHealth <= 0)
+	if (!_isDead)
 	{
-		Die();
-	}
+		// Subtract incoming damage from current health
+		_currentHealth -= DamageAmount;
 
-	return _currentHealth;
+		UE_LOG(LogTemp, Log, TEXT("Player Took %f Damage. %f Health Remaining."), DamageAmount, _currentHealth);
+
+		if (_currentHealth <= 0)
+		{
+			Die();
+		}
+
+		return _currentHealth;
+	}
+	else
+	{
+		return 0;
+	}
 }
 
 void AMazeCharacter::Die()
 {
-	_currentHealth = maxHealth;
+	_isDead = true;
+	_currentHealth = 0;
 
-	SetActorLocation(mazeBeginning);
+	_disableControls = true;
+
+	GetMesh()->PlayAnimation(_deathAnim, false);
 }
 
 // Called every frame
@@ -96,14 +106,31 @@ void AMazeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 */
 
 /// <summary>
+/// Allow the player to continue playing after death
+/// </summary>
+void AMazeCharacter::ResetPlayer()
+{
+	_isDead = false;
+
+	SetActorLocation(mazeBeginning);
+
+	_currentHealth = maxHealth;
+
+	_disableControls = false;
+}
+
+/// <summary>
 /// Moves maze character forwards and backwards
 /// </summary>
 /// <param name="value"></param>
 void AMazeCharacter::MoveFB(float value)
 {
-	_noiseIntensity = 1;
-	AddMovementInput(GetActorForwardVector(), value * walkSpeed);
-	_noiseIntensity = 0;
+	if (_disableControls)
+	{
+		return;
+	}
+
+	AddMovementInput(GetActorForwardVector(), value * _walkSpeed);
 }
 
 /// <summary>
@@ -112,9 +139,12 @@ void AMazeCharacter::MoveFB(float value)
 /// <param name="value"></param>
 void AMazeCharacter::MoveLR(float value)
 {
-	_noiseIntensity = 1;
-	AddMovementInput(-GetActorRightVector(), value * walkSpeed);
-	_noiseIntensity = 0;
+	if (_disableControls)
+	{
+		return;
+	}
+
+	AddMovementInput(-GetActorRightVector(), value * _walkSpeed);
 }
 
 /// <summary>
@@ -123,7 +153,12 @@ void AMazeCharacter::MoveLR(float value)
 /// <param name="value"></param>
 void AMazeCharacter::RotateLR(float value)
 {
-	AddControllerYawInput(value * rotationSpeed);
+	if (_disableControls)
+	{
+		return;
+	}
+
+	AddControllerYawInput(value * _rotationSpeed);
 }
 
 /// <summary>
@@ -132,39 +167,67 @@ void AMazeCharacter::RotateLR(float value)
 /// <param name="value"></param>
 void AMazeCharacter::RotateUD(float value)
 {
+	if (_disableControls)
+	{
+		return;
+	}
+
 	if (value)
 	{
 		// Cap pitch rotation, must disable "Use Pawn Control Rotation" for this method
-		float nextPitchValue = SpringArmComponent->GetRelativeRotation().Pitch + (value * rotationSpeed);
+		float nextPitchValue = SpringArmComponent->GetRelativeRotation().Pitch + (value * _rotationSpeed);
 		
 		if (nextPitchValue > -45 && nextPitchValue < 15)
 		{
-			SpringArmComponent->AddLocalRotation(FRotator(value * rotationSpeed, 0, 0));
+			SpringArmComponent->AddLocalRotation(FRotator(value * _rotationSpeed, 0, 0));
 		}
 	}
 }
 
 void AMazeCharacter::StartCrouching()
 {
-	GetCharacterMovement()->MaxWalkSpeed *= crouchSpeedMultiplier;
+	if (_disableControls)
+	{
+		return;
+	}
+
+	GetCharacterMovement()->MaxWalkSpeed *= _crouchSpeedMultiplier;
 }
 
 void AMazeCharacter::StopCrouching()
 {
-	GetCharacterMovement()->MaxWalkSpeed /= crouchSpeedMultiplier;
+	if (_disableControls)
+	{
+		return;
+	}
+
+	GetCharacterMovement()->MaxWalkSpeed /= _crouchSpeedMultiplier;
 }
 
 void AMazeCharacter::StartSprinting()
 {
-	GetCharacterMovement()->MaxWalkSpeed *= sprintSpeedMultiplier;
+	if (_disableControls)
+	{
+		return;
+	}
+
+	GetCharacterMovement()->MaxWalkSpeed *= _sprintSpeedMultiplier;
 }
 
 void AMazeCharacter::StopSprinting()
 {
-	GetCharacterMovement()->MaxWalkSpeed /= sprintSpeedMultiplier;
+	if (_disableControls)
+	{
+		return;
+	}
+
+	GetCharacterMovement()->MaxWalkSpeed /= _sprintSpeedMultiplier;
 }
 
 void AMazeCharacter::UseStunAbility()
 {
-
+	if (_disableControls)
+	{
+		return;
+	}
 }

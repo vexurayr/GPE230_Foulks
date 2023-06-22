@@ -39,11 +39,6 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 		float _currentHealth;
 	/// <summary>
-	/// The level of noise the player makes as they move
-	/// </summary>
-	UPROPERTY(BlueprintReadOnly)
-		float _noiseIntensity;
-	/// <summary>
 	/// The amount of time it takes to regain the stun ability
 	/// </summary>
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
@@ -53,6 +48,10 @@ protected:
 	/// </summary>
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		float _stunAbilityTimer;
+	UPROPERTY(BlueprintReadOnly)
+		bool _isDead = false;
+	UPROPERTY(BlueprintReadOnly)
+		bool _disableControls = false;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -62,6 +61,9 @@ protected:
 			AActor* DamageCauser) override;
 
 	virtual void Die();
+
+	UFUNCTION(BlueprintCallable)
+		void ResetPlayer();
 
 	// Spring arm component for reducing camera obstruction
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
@@ -73,13 +75,15 @@ protected:
 // Variables and functions for character movement
 private:
 	UPROPERTY(EditAnywhere)
-		float walkSpeed;
+		float _walkSpeed;
 	UPROPERTY(EditAnywhere)
-		float crouchSpeedMultiplier;
+		float _crouchSpeedMultiplier;
 	UPROPERTY(EditAnywhere)
-		float sprintSpeedMultiplier;
+		float _sprintSpeedMultiplier;
 	UPROPERTY(EditAnywhere)
-		float rotationSpeed;
+		float _rotationSpeed;
+	UPROPERTY(EditAnywhere)
+		UAnimSequence* _deathAnim;
 
 	void MoveFB(float value);
 	void MoveLR(float value);
