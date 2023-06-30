@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "MazeCharacter.h"
 #include "LockAndKey.h"
+#include "MazeCharacter.h"
 
 /// <summary>
 /// Call CheckActorType when something enters the collider

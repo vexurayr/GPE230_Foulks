@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -84,6 +86,11 @@ private:
 		float _rotationSpeed;
 	UPROPERTY(EditAnywhere)
 		UAnimSequence* _deathAnim;
+	UPROPERTY(EditAnywhere)
+		UNiagaraSystem* _stunSystem;
+
+	UFUNCTION(BlueprintCallable)
+		void ActivateStunParticleSystem();
 
 	void MoveFB(float value);
 	void MoveLR(float value);

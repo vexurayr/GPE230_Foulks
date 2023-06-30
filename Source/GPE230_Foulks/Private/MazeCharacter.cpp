@@ -62,6 +62,9 @@ float AMazeCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	}
 }
 
+/// <summary>
+/// Disable controls and play a death animation
+/// </summary>
 void AMazeCharacter::Die()
 {
 	_isDead = true;
@@ -117,6 +120,26 @@ void AMazeCharacter::ResetPlayer()
 	_currentHealth = maxHealth;
 
 	_disableControls = false;
+}
+
+/// <summary>
+/// Emit particles when the stun ability is used
+/// </summary>
+void AMazeCharacter::ActivateStunParticleSystem()
+{
+	if (_stunSystem)
+	{
+		USceneComponent* AttachComp = GetDefaultAttachComponent();
+
+		UNiagaraComponent* NiagaraComp = UNiagaraFunctionLibrary::SpawnSystemAttached(_stunSystem, AttachComp, NAME_None,
+			FVector(0), FRotator(0), EAttachLocation::Type::KeepRelativeOffset, true);
+
+		NiagaraComp->Activate();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Player attempted to use the stun ability, but no template particle system was found."));
+	}
 }
 
 /// <summary>
