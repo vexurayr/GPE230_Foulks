@@ -25,6 +25,12 @@ AMazeCharacter::AMazeCharacter()
 	SpringArmComponent->TargetArmLength = 300.0f;
 }
 
+
+void AMazeCharacter::IncreaseSprintSpeedMultiplier(float IncreaseAmount)
+{
+	_sprintSpeedMultiplier += IncreaseAmount;
+}
+
 // Called when the game starts or when spawned
 void AMazeCharacter::BeginPlay()
 {
@@ -60,6 +66,11 @@ float AMazeCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	{
 		return 0;
 	}
+}
+
+float AMazeCharacter::GetCurrentHealth()
+{
+	return _currentHealth;
 }
 
 /// <summary>
@@ -100,6 +111,25 @@ void AMazeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 	PlayerInputComponent->BindAction(TEXT("Crouch"), IE_Pressed, this, &AMazeCharacter::StartCrouching);
 	PlayerInputComponent->BindAction(TEXT("Crouch"), IE_Released, this, &AMazeCharacter::StopCrouching);
+}
+
+/// <summary>
+/// Apply healing to the player, capped by max health
+/// </summary>
+/// <param name="HealingAmount"></param>
+/// <returns>Player's resulting current health</returns>
+float AMazeCharacter::Heal(float HealingAmount)
+{
+	_currentHealth += HealingAmount;
+
+	UE_LOG(LogTemp, Log, TEXT("Player received %f health. %f Health Remaining."), HealingAmount, _currentHealth);
+
+	if (_currentHealth > maxHealth)
+	{
+		_currentHealth = maxHealth;
+	}
+
+	return _currentHealth;
 }
 
 /*
