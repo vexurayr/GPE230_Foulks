@@ -22,7 +22,7 @@ public:
 	/// </summary>
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		float maxHealth;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FVector mazeBeginning;
 
 	// Sets default values for this character's properties
