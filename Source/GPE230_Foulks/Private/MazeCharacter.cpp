@@ -35,7 +35,13 @@ void AMazeCharacter::IncreaseSprintSpeedMultiplier(float IncreaseAmount)
 void AMazeCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	_controller = Cast<APlayerController>(GetController());
 	_currentHealth = maxHealth;
+
+	_gameOverScreenInstance = CreateWidget(GetWorld(), _gameOverScreenTemplate);
+	_victoryScreenInstance = CreateWidget(GetWorld(), _victoryScreenTemplate);
+	_pauseScreenInstance = CreateWidget(GetWorld(), _pauseScreenTemplate);
 }
 
 /// <summary>
@@ -74,6 +80,14 @@ float AMazeCharacter::GetCurrentHealth()
 }
 
 /// <summary>
+/// Display the victory widget
+/// </summary>
+void AMazeCharacter::OpenVictoryScreen()
+{
+	_victoryScreenInstance->AddToViewport();
+}
+
+/// <summary>
 /// Disable controls and play a death animation
 /// </summary>
 void AMazeCharacter::Die()
@@ -84,6 +98,9 @@ void AMazeCharacter::Die()
 	_disableControls = true;
 
 	GetMesh()->PlayAnimation(_deathAnim, false);
+
+	GetWorld()->GetTimerManager().SetTimer(deathTimerHandle, this,
+		&AMazeCharacter::OpenGameOverScreen, _deathAnim->GetPlayLength() + 1, false);
 }
 
 // Called every frame
@@ -111,6 +128,8 @@ void AMazeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 	PlayerInputComponent->BindAction(TEXT("Crouch"), IE_Pressed, this, &AMazeCharacter::StartCrouching);
 	PlayerInputComponent->BindAction(TEXT("Crouch"), IE_Released, this, &AMazeCharacter::StopCrouching);
+
+	PlayerInputComponent->BindAction(TEXT("Pause Game"), IE_Pressed, this, &AMazeCharacter::PauseGameSequence);
 }
 
 /// <summary>
@@ -150,6 +169,58 @@ void AMazeCharacter::ResetPlayer()
 	_currentHealth = maxHealth;
 
 	_disableControls = false;
+}
+
+/// <summary>
+/// Takes all the steps necessary to unpause the game
+/// </summary>
+void AMazeCharacter::UnpauseGameSequence()
+{
+	ShowMouseCursor(false);
+	PauseGameplay(false);
+}
+
+/// <summary>
+/// Takes all the steps necessary to pause the game
+/// </summary>
+void AMazeCharacter::PauseGameSequence()
+{
+	OpenPauseScreen();
+	ShowMouseCursor(true);
+	PauseGameplay(true);
+}
+
+/// <summary>
+/// Display the game over widget
+/// </summary>
+void AMazeCharacter::OpenGameOverScreen()
+{
+	_gameOverScreenInstance->AddToViewport();
+}
+
+/// <summary>
+/// Display the pause menu widget
+/// </summary>
+void AMazeCharacter::OpenPauseScreen()
+{
+	_pauseScreenInstance->AddToViewport();
+}
+
+/// <summary>
+/// Freeze or unfreeze everything in the scene
+/// </summary>
+/// <param name="IsPaused"></param>
+void AMazeCharacter::PauseGameplay(bool IsPaused)
+{
+	_controller->SetPause(IsPaused);
+}
+
+/// <summary>
+/// Make the mouse cursor visible
+/// </summary>
+void AMazeCharacter::ShowMouseCursor(bool IsShowing)
+{
+	_controller->bShowMouseCursor = IsShowing;
 }
 
 /// <summary>

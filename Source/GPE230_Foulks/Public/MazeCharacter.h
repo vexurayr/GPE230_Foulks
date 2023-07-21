@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Blueprint/UserWidget.h"
 #include "NiagaraFunctionLibrary.h"
 #include "NiagaraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -42,6 +43,8 @@ public:
 
 	float GetCurrentHealth();
 
+	virtual void OpenVictoryScreen();
+
 protected:
 	/// <summary>
 	/// The current health of the player character
@@ -63,6 +66,13 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 		bool _disableControls = false;
 
+	/// <summary>
+	/// The controller directing this actor
+	/// </summary>
+	APlayerController* _controller;
+
+	FTimerHandle deathTimerHandle;
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
@@ -82,8 +92,31 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		class UCameraComponent* CameraComponent;
 
+	UFUNCTION(BlueprintCallable)
+		virtual void UnpauseGameSequence();
+
+	virtual void PauseGameSequence();
+	virtual void OpenGameOverScreen();
+	virtual void OpenPauseScreen();
+	virtual void PauseGameplay(bool IsPaused);
+	virtual void ShowMouseCursor(bool IsShowing);
+
 // Variables and functions for character movement
 private:
+	// Variable storing game over widget for when the player dies
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<UUserWidget> _gameOverScreenTemplate;
+	UUserWidget* _gameOverScreenInstance;
+
+	// Variable storing victory widget for when the player completes a level
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<UUserWidget> _victoryScreenTemplate;
+	UUserWidget* _victoryScreenInstance;
+
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<UUserWidget> _pauseScreenTemplate;
+	UUserWidget* _pauseScreenInstance;
+
 	UPROPERTY(EditAnywhere)
 		float _walkSpeed;
 	UPROPERTY(EditAnywhere)
