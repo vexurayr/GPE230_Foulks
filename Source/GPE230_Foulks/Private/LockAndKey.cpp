@@ -30,5 +30,8 @@ void ALockAndKey::CheckActorType(AActor* OverlappedActor, AActor* OtherActor)
 /// </summary>
 void ALockAndKey::OpenTheDoor()
 {
+	// Play sound to signify door being opened
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), doorOpeningSound, ALockAndKey::GetActorLocation);
+
 	this->Destroy();
 }

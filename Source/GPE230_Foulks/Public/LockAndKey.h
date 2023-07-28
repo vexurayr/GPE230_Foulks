@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Sound/SoundWave.h"
+#include "Kismet/GameplayStatics.h"
 #include "Engine/TriggerBox.h"
 #include "LockAndKey.generated.h"
 
@@ -21,4 +23,8 @@ public:
 		void CheckActorType(class AActor* OverlappedActor, class AActor* OtherActor);
 	UFUNCTION()
 		void OpenTheDoor();
+
+protected:
+	UPROPERTY(EditAnywhere)
+		USoundWave* doorOpeningSound;
 };

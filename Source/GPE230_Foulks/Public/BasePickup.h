@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Sound/SoundWave.h"
+#include "Kismet/GameplayStatics.h"
 #include "Engine/TriggerBox.h"
 #include "MazeCharacter.h"
 #include "BasePickup.generated.h"
@@ -25,6 +27,9 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 		float disabledDuration;
+
+	UPROPERTY(EditAnywhere)
+		USoundWave* pickupCollected;
 
 	FTimerHandle pickupTimerHandle;
 

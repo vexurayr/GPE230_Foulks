@@ -60,6 +60,9 @@ void ANPCEnemy::DetectHit()
 				UGameplayStatics::ApplyDamage(HitResult.GetActor(), _HitDamage, GetController(), this, UDamageType::StaticClass());
 
 				canDamage = false;
+
+				// Play sound to signify punch connecting
+				UGameplayStatics::PlaySoundAtLocation(GetWorld(), punchSound, PunchLocation);
 			}
 		}
 	}
