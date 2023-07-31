@@ -15,8 +15,12 @@ class GPE230_FOULKS_API UMazeSaveGame : public USaveGame
 	GENERATED_BODY()
 	
 public:
-	int furthestCompletedStage;
-	float masterVolumeSetting;
-	float musicVolumeSetting;
-	float soundEffectVolumeSetting;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int furthestCompletedStage;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float masterVolumeSetting;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float musicVolumeSetting;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float soundEffectVolumeSetting;
 };

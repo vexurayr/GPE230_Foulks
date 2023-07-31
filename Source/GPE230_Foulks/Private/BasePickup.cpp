@@ -21,7 +21,7 @@ void ABasePickup::BeginPlay()
 void ABasePickup::Apply(AMazeCharacter* Player)
 {
 	// Play sound to signify pickup being collected
-	UGameplayStatics::PlaySoundAtLocation(GetWorld(), pickupCollected, ABasePickup::GetActorLocation);
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), pickupCollected, ABasePickup::GetActorLocation());
 
 	UE_LOG(LogTemp, Log, TEXT("Applying powerup to %s."), *Player->GetName());
 

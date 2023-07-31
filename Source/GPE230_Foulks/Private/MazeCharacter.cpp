@@ -84,6 +84,9 @@ float AMazeCharacter::GetCurrentHealth()
 /// </summary>
 void AMazeCharacter::OpenVictoryScreen()
 {
+	ShowMouseCursor(true);
+	PauseGameplay(true);
+
 	_victoryScreenInstance->AddToViewport();
 }
 
