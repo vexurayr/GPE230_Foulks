@@ -103,7 +103,7 @@ void AMazeCharacter::Die()
 	GetMesh()->PlayAnimation(_deathAnim, false);
 
 	GetWorld()->GetTimerManager().SetTimer(deathTimerHandle, this,
-		&AMazeCharacter::OpenGameOverScreen, _deathAnim->GetPlayLength() + 1, false);
+		&AMazeCharacter::OpenGameOverScreen, _deathAnim->GetPlayLength(), false);
 }
 
 // Called every frame
