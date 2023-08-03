@@ -106,16 +106,16 @@ private:
 	// Variable storing game over widget for when the player dies
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<UUserWidget> _gameOverScreenTemplate;
-	UUserWidget* _gameOverScreenInstance;
+	UUserWidget* _gameOverScreenInstance = nullptr;
 
 	// Variable storing victory widget for when the player completes a level
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<UUserWidget> _victoryScreenTemplate;
-	UUserWidget* _victoryScreenInstance;
+	UUserWidget* _victoryScreenInstance = nullptr;
 
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<UUserWidget> _pauseScreenTemplate;
-	UUserWidget* _pauseScreenInstance;
+	UUserWidget* _pauseScreenInstance = nullptr;
 
 	UPROPERTY(EditAnywhere)
 		float _walkSpeed;

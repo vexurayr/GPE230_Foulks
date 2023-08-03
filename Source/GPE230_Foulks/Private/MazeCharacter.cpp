@@ -38,10 +38,6 @@ void AMazeCharacter::BeginPlay()
 
 	_controller = Cast<APlayerController>(GetController());
 	_currentHealth = maxHealth;
-
-	_gameOverScreenInstance = CreateWidget(GetWorld(), _gameOverScreenTemplate);
-	_victoryScreenInstance = CreateWidget(GetWorld(), _victoryScreenTemplate);
-	_pauseScreenInstance = CreateWidget(GetWorld(), _pauseScreenTemplate);
 }
 
 /// <summary>
@@ -87,7 +83,23 @@ void AMazeCharacter::OpenVictoryScreen()
 	ShowMouseCursor(true);
 	PauseGameplay(true);
 
-	_victoryScreenInstance->AddToViewport();
+	if (_victoryScreenTemplate)
+	{
+		_victoryScreenInstance = CreateWidget(GetWorld(), _victoryScreenTemplate);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Victory screen template is null!"));
+	}
+
+	if (_victoryScreenInstance)
+	{
+		_victoryScreenInstance->AddToViewport();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Victory screen is null!"));
+	}
 }
 
 /// <summary>
@@ -198,7 +210,26 @@ void AMazeCharacter::PauseGameSequence()
 /// </summary>
 void AMazeCharacter::OpenGameOverScreen()
 {
-	_gameOverScreenInstance->AddToViewport();
+	ShowMouseCursor(true);
+	PauseGameplay(true);
+
+	if (_gameOverScreenTemplate)
+	{
+		_gameOverScreenInstance = CreateWidget(GetWorld(), _gameOverScreenTemplate);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Game over screen template is null!"));
+	}
+
+	if (_gameOverScreenInstance)
+	{
+		_gameOverScreenInstance->AddToViewport();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Game over screen is null!"));
+	}
 }
 
 /// <summary>
@@ -206,7 +237,23 @@ void AMazeCharacter::OpenGameOverScreen()
 /// </summary>
 void AMazeCharacter::OpenPauseScreen()
 {
-	_pauseScreenInstance->AddToViewport();
+	if (_pauseScreenTemplate)
+	{
+		_pauseScreenInstance = CreateWidget(GetWorld(), _pauseScreenTemplate);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Pause screen template is null!"));
+	}
+
+	if (_pauseScreenInstance)
+	{
+		_pauseScreenInstance->AddToViewport();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Pause screen is null!"));
+	}
 }
 
 /// <summary>
