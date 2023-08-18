@@ -137,8 +137,6 @@ private:
 	void MoveLR(float value);
 	void RotateLR(float value);
 	void RotateUD(float value);
-	void StartCrouching();
-	void StopCrouching();
 	void StartSprinting();
 	void StopSprinting();
 	void UseStunAbility();

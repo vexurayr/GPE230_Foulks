@@ -141,9 +141,6 @@ void AMazeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAction(TEXT("Sprint"), IE_Pressed, this, &AMazeCharacter::StartSprinting);
 	PlayerInputComponent->BindAction(TEXT("Sprint"), IE_Released, this, &AMazeCharacter::StopSprinting);
 
-	PlayerInputComponent->BindAction(TEXT("Crouch"), IE_Pressed, this, &AMazeCharacter::StartCrouching);
-	PlayerInputComponent->BindAction(TEXT("Crouch"), IE_Released, this, &AMazeCharacter::StopCrouching);
-
 	PlayerInputComponent->BindAction(TEXT("Pause Game"), IE_Pressed, this, &AMazeCharacter::PauseGameSequence);
 }
 
@@ -304,6 +301,9 @@ void AMazeCharacter::MoveFB(float value)
 		return;
 	}
 
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(
+		//TEXT("Moving FB, Value: %f"), value));
+
 	AddMovementInput(GetActorForwardVector(), value * _walkSpeed);
 }
 
@@ -317,6 +317,9 @@ void AMazeCharacter::MoveLR(float value)
 	{
 		return;
 	}
+
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(
+		//TEXT("Moving LR, Value: %f"), value));
 
 	AddMovementInput(-GetActorRightVector(), value * _walkSpeed);
 }
@@ -356,26 +359,6 @@ void AMazeCharacter::RotateUD(float value)
 			SpringArmComponent->AddLocalRotation(FRotator(value * _rotationSpeed, 0, 0));
 		}
 	}
-}
-
-void AMazeCharacter::StartCrouching()
-{
-	if (_disableControls)
-	{
-		return;
-	}
-
-	GetCharacterMovement()->MaxWalkSpeed *= _crouchSpeedMultiplier;
-}
-
-void AMazeCharacter::StopCrouching()
-{
-	if (_disableControls)
-	{
-		return;
-	}
-
-	GetCharacterMovement()->MaxWalkSpeed /= _crouchSpeedMultiplier;
 }
 
 void AMazeCharacter::StartSprinting()
